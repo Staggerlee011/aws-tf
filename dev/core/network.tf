@@ -1,7 +1,7 @@
 # Create a route table as main
 resource "aws_default_route_table" "config-mgmt-rt-main" {
-  default_route_table_id = "${var.default_route_table}" 
-    tags = {
+  default_route_table_id = "${var.default_route_table}"
+  tags = {
     Name = "CONFIG-MGMT-DEFAULT-RT"
   }
 }
@@ -51,9 +51,9 @@ resource "aws_route" "config-mgmt-inetr-r" {
 #Create mtcnovo.net DHCP option set - You will need to manaully delete the default VPC
 #after running this script for the first time 
 resource "aws_vpc_dhcp_options" "config-mgmt-dhcp" {
-  domain_name          = "mtcnovo.net"
-  domain_name_servers  = ["10.222.1.5", "10.222.21.5"]
-  ntp_servers          = ["10.222.2.139", "10.222.22.209"]
+  domain_name         = "mtcnovo.net"
+  domain_name_servers = ["10.222.1.5", "10.222.21.5"]
+  ntp_servers         = ["10.222.2.139", "10.222.22.209"]
 
   tags = {
     Name = "mtcnovo.net"
@@ -72,37 +72,37 @@ resource "aws_security_group" "config-mgmt-sg-app" {
   description = "Allow Access from MGMT VPC to Instance"
   vpc_id      = "${aws_vpc.config-mgmt-vpc.id}"
 
-# Allow SSH access to servers from MGMT RDP CONFIG-MGMT Security Group
- ingress {
-   from_port   = 22
-   to_port     = 22
-   protocol    = "TCP"
-   security_groups = ["${var.mgmt_config-mgmt_rdp_sg}"]
-   description = "Allow SSH from MGMT RDP CONFIG-MGMT VPC"
- }
+  # Allow SSH access to servers from MGMT RDP CONFIG-MGMT Security Group
+  ingress {
+    from_port       = 22
+    to_port         = 22
+    protocol        = "TCP"
+    security_groups = ["${var.mgmt_config-mgmt_rdp_sg}"]
+    description     = "Allow SSH from MGMT RDP CONFIG-MGMT VPC"
+  }
 
   ingress {
-    from_port   = 80
-    to_port     = 80
-    protocol    = "TCP"
+    from_port       = 80
+    to_port         = 80
+    protocol        = "TCP"
     security_groups = ["${aws_security_group.config-mgmt-sg-ialb-app.id}"]
-    description = "HTTP from Load Balancer"
+    description     = "HTTP from Load Balancer"
   }
 
   ingress {
-    from_port   = 10050
-    to_port     = 10050
-    protocol    = "TCP"
+    from_port       = 10050
+    to_port         = 10050
+    protocol        = "TCP"
     security_groups = ["${var.zabbix_agent_sg}"]
-    description = "Zabbix Agent Connection"
+    description     = "Zabbix Agent Connection"
   }
 
   ingress {
-    from_port   = 4118
-    to_port     = 4118
-    protocol    = "TCP"
+    from_port       = 4118
+    to_port         = 4118
+    protocol        = "TCP"
     security_groups = ["${var.mgmt_config-mgmt_trend_sg}"]
-    description = "Allow Trend Deep Security"
+    description     = "Allow Trend Deep Security"
   }
 
   egress {
@@ -113,7 +113,7 @@ resource "aws_security_group" "config-mgmt-sg-app" {
     description = "Allow All"
   }
 
-    tags = {
+  tags = {
     Name = "CONFIG-MGMT-APP-SG"
   }
 }

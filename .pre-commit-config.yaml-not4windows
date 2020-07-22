@@ -1,0 +1,42 @@
+repos:
+
+- repo: https://github.com/pre-commit/pre-commit-hooks
+  rev: v3.1.0  # Use the ref you want to point at
+  hooks:
+  - id: detect-aws-credentials
+  - id: detect-private-key  
+#    - id: no-commit-to-branch
+#    args: [--branch, master]
+
+- repo: local
+  hooks:
+  - id: terraform-fmt
+    name: terraform fmt
+    description: runs terraform fmt
+    entry: terraform fmt -recursive
+    language: system
+    pass_filenames: false
+  
+  - id: tf-lint
+    name: tf lint
+    description: runs tf lint
+    entry: tflint 
+    language: system
+    #pass_filenames: false
+
+  #  hooks:
+  #  - id: tf-lint
+  #    name: tf lint
+  #    description: runs tf lint
+  #    entry: tflint 
+  #    language: system
+
+  #  - id: terraform-fmt
+  #    name: terraform fmt
+  #    description: runs terraform fmt
+  #    entry: terraform fmt 
+  #    args: [-recursive]
+   #   language: system
+    
+
+
