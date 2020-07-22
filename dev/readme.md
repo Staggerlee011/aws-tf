@@ -18,6 +18,8 @@ creates vpc, subnets and connectivity
 
 creates eks environment
 
+    ONLY RUNS ON LINUX ! ! ! 
+
 ### steps to setup
 
 - `cd 01-eks`
