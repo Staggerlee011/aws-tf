@@ -3,5 +3,5 @@ update_configs:
   # Keep package.json (& lockfiles) secure and up-to-date,
   # batching pull requests daily
   - package_manager: "terraform"
-    directory: "/"
+    directory: "dev/eks/"
     update_schedule: "daily"
