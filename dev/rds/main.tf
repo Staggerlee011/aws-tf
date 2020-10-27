@@ -1,53 +1,56 @@
-provider "aws" {
-  region = var.region
-}
-
-
 module "db" {
   source  = "terraform-aws-modules/rds/aws"
-  version = "2.14.0"
+  version = "2.18.0"
 
-  identifier = "rds-postgres"
+  # size
+  instance_class = "db.t2.micro"
+  multi_az       = false
 
-  engine            = "postgres"
-  engine_version    = "9.6.9"
-  instance_class    = "db.t2.medium"
+  # engine
+  engine               = var.rds_engine
+  engine_version       = "12"
+  family               = "postgres12"
+  major_engine_version = "12"
+
+  # stroage
   allocated_storage = 5
-  storage_encrypted = false
+  #storage_encrypted = true
+  storage_type = "gp2"
+  # iops =
 
+  # user details
+  identifier                          = var.rds_name
+  name                                = var.rds_name
+  username                            = var.rds_user
+  password                            = random_password.pwd.result
+  iam_database_authentication_enabled = true
 
-  name     = "rdspostgres"
-  username = "postgres"
-  password = "YourPwdShouldBeLongAndSecure!"
-  port     = "5432"
+  # networking
+  port                   = 54321
+  publicly_accessible    = true
+  subnet_ids             = data.aws_subnet_ids.subnets.ids
+  vpc_security_group_ids = [data.aws_security_group.rds-sg.id]
 
-  vpc_security_group_ids = [data.aws_security_group.db-sg.id]
-
+  # maintenance
   maintenance_window = "Mon:00:00-Mon:03:00"
   backup_window      = "03:00-06:00"
 
-  # disable backups to create DB faster
-  backup_retention_period = 0
-
-  tags = {
-    Environment = var.environment
-    Application = "rds"
-  }
-
+  # monitoring
+  #performance_insights_enabled          = true
+  #performance_insights_retention_period = 7
   enabled_cloudwatch_logs_exports = ["postgresql", "upgrade"]
-
-  # DB subnet group
-  subnet_ids = data.aws_subnet_ids.subnets.ids
-
-  # DB parameter group
-  family = "postgres9.6"
-
-  # DB option group
-  major_engine_version = "9.6"
-
-  # Snapshot name upon DB deletion
-  final_snapshot_identifier = "demodb"
+  create_monitoring_role          = true
+  monitoring_role_name            = "app-dev-monitoring-role"
+  monitoring_interval             = 60
 
   # Database Deletion Protection
+  #final_snapshot_identifier = "appdevrds"
   deletion_protection = false
+
+  tags = {
+    "Terraform"   = "true"
+    "Environment" = data.aws_vpc.vpc.tags["Name"]
+    "Application" = "RDS"
+  }
+
 }

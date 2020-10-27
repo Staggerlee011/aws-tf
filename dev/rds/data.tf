@@ -14,7 +14,7 @@ data "aws_subnet_ids" "subnets" {
 }
 
 # security group for rds
-data "aws_security_group" "db-sg" {
+data "aws_security_group" "rds-sg" {
   vpc_id = data.aws_vpc.vpc.id
-  name   = "rds"
+  name   = "rds-sg"
 }

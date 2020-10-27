@@ -1,9 +1,18 @@
-variable "region" {
-  description = "region to deploy to, linux acedamy runs on us-east-2 and us-west-1"
-  default     = "us-east-1"
+
+variable "rds_engine" {
+  description = "type of rds instance"
+  type        = string
+  default     = "postgres"
 }
 
-variable "environment" {
-  description = "environment tag used througout deployment"
-  default     = "development"
+variable "rds_name" {
+  description = "identifier / name for the rds service"
+  type        = string
+  default     = "appdevrds"
+}
+
+variable "rds_user" {
+  description = "admin user for rds postgres"
+  type        = string
+  default     = "postgres"
 }

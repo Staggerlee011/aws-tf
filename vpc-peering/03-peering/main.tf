@@ -5,7 +5,7 @@ provider "aws" {
 
 data "aws_vpc" "vpc" {
   tags = {
-    Name = "simple-example"
+    Name = "vpc-peering-requestor"
   }
 }
 
@@ -27,8 +27,8 @@ module "multi-account-peering" {
   # Accepter Data
 
   peer_region          = "us-east-1"
-  peer_profile         = "eng" # Profiles assumed to be in ~/.aws/credentials
-  peer_vpc_id          = "vpc-0f5b69fdf15a04c15"
+  peer_profile         = "secure" # Profiles assumed to be in ~/.aws/credentials
+  peer_vpc_id          = "vpc-020385946eb4a6dea"
   peer_cidr_block      = "10.1.0.0/16"
   peer_route_table_ids = []
 
